@@ -1,15 +1,8 @@
 package kg.megacom.courses.services.impl;
 
-import kg.megacom.courses.dao.CourseRepo;
-import kg.megacom.courses.dao.StudentRepo;
-import kg.megacom.courses.dao.TeacherRepo;
-import kg.megacom.courses.dto.CourseDto;
-import kg.megacom.courses.dto.RegisterDto;
-import kg.megacom.courses.dto.StudentDto;
-import kg.megacom.courses.dto.TeacherDto;
-import kg.megacom.courses.entities.Course;
-import kg.megacom.courses.entities.Student;
-import kg.megacom.courses.entities.Teacher;
+import kg.megacom.courses.dao.*;
+import kg.megacom.courses.dto.*;
+import kg.megacom.courses.entities.*;
 import kg.megacom.courses.mappers.ClassMapper;
 import kg.megacom.courses.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +22,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private TeacherRepo teacherRepo;
+
+    @Autowired
+    private ClassroomRepo classroomRepo;
+
+    @Autowired
+    private DayRepo dayRepo;
+
+    @Autowired
+    private CourseDayRepo courseDayRepo;
 
     @Override
     public CourseDto saveCourse(CourseDto courseDto) {
@@ -100,5 +102,60 @@ public class AdminServiceImpl implements AdminService {
     public List<TeacherDto> getTeachers() {
         List<Teacher> teachers = teacherRepo.findAll();
         return ClassMapper.INSTANCE.teachersToTeacherDtos(teachers);
+    }
+
+    @Override
+    public ClassroomDto saveClassroom(ClassroomDto classroomDto) {
+        Classroom classroom = ClassMapper.INSTANCE.classroomDtoToClassroom(classroomDto);
+        classroom = classroomRepo.save(classroom);
+        return ClassMapper.INSTANCE.classroomToClassroomDto(classroom);
+    }
+
+    @Override
+    public List<ClassroomDto> getClassrooms() {
+        List<Classroom> classrooms = classroomRepo.findAll();
+        return ClassMapper.INSTANCE.classroomsToClassroomDtos(classrooms);
+    }
+
+    @Override
+    public DayDto saveDay(DayDto dayDto) {
+        Day day = ClassMapper.INSTANCE.dayDtoToDay(dayDto);
+        day = dayRepo.save(day);
+        return ClassMapper.INSTANCE.dayToDayDto(day);
+    }
+
+    @Override
+    public List<DayDto> getDays() {
+        List<Day> days = dayRepo.findAllByActiveTrue();
+        return ClassMapper.INSTANCE.daysToDayDtos(days);
+    }
+
+    @Override
+    public CourseDayDto setCourseClassroomAndDay(CourseDayDto courseDayDto) {
+        Course course = courseRepo.findById(courseDayDto.getCourseId()).orElse(null);
+        if (course == null) {
+            throw new RuntimeException("Курса с таким id не существует!");
+        }
+
+        Classroom classroom = classroomRepo.findById(courseDayDto.getClassroomId()).orElse(null);
+        if (classroom == null) {
+            throw new RuntimeException("Аудитории с таким id не существует!");
+        }
+
+        Day day = dayRepo.findById(courseDayDto.getDayId()).orElse(null);
+        if (day == null) {
+            throw new RuntimeException("Дня недели с таким id не существует!");
+        }
+
+        CourseDay courseDay = new CourseDay();
+        courseDay.setCourse(course);
+        courseDay.setClassroom(classroom);
+        courseDay.setDay(day);
+        courseDay.setBeginTime(courseDayDto.getBeginTime());
+        courseDay.setEndTime(courseDayDto.getEndTime());
+
+        courseDay = courseDayRepo.save(courseDay);
+
+        return ClassMapper.INSTANCE.courseDayToCourseDayDto(courseDay);
     }
 }

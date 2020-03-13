@@ -1,11 +1,7 @@
 package kg.megacom.courses.mappers;
 
-import kg.megacom.courses.dto.CourseDto;
-import kg.megacom.courses.dto.StudentDto;
-import kg.megacom.courses.dto.TeacherDto;
-import kg.megacom.courses.entities.Course;
-import kg.megacom.courses.entities.Student;
-import kg.megacom.courses.entities.Teacher;
+import kg.megacom.courses.dto.*;
+import kg.megacom.courses.entities.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -27,4 +23,16 @@ public interface ClassMapper {
     Teacher teacherDtoToTeacher (TeacherDto teacherDto);
     TeacherDto teacherToTeacherDto(Teacher teacher);
     List<TeacherDto> teachersToTeacherDtos(List<Teacher> teachers);
+
+    Classroom classroomDtoToClassroom(ClassroomDto classroomDto);
+    ClassroomDto classroomToClassroomDto(Classroom classroom);
+    List<ClassroomDto> classroomsToClassroomDtos(List<Classroom> classrooms);
+
+    Day dayDtoToDay(DayDto dayDto);
+    DayDto dayToDayDto(Day day);
+    List<DayDto> daysToDayDtos(List<Day> days);
+
+
+    CourseDayDto courseDayToCourseDayDto(CourseDay courseDay);
+
 }

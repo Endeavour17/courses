@@ -1,9 +1,6 @@
 package kg.megacom.courses.services;
 
-import kg.megacom.courses.dto.CourseDto;
-import kg.megacom.courses.dto.RegisterDto;
-import kg.megacom.courses.dto.StudentDto;
-import kg.megacom.courses.dto.TeacherDto;
+import kg.megacom.courses.dto.*;
 
 import java.util.List;
 
@@ -19,4 +16,12 @@ public interface AdminService {
 
     TeacherDto saveTeacher(TeacherDto teacherDto);
     List<TeacherDto> getTeachers();
+
+    ClassroomDto saveClassroom(ClassroomDto classroomDto);
+    List<ClassroomDto> getClassrooms();
+
+    DayDto saveDay(DayDto dayDto);
+    List<DayDto> getDays();
+
+    CourseDayDto setCourseClassroomAndDay(CourseDayDto courseDayDto);
 }
