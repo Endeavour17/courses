@@ -2,7 +2,7 @@ package kg.megacom.courses.dto;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalTime;
 
 @Data
 public class CourseDayDto {
@@ -10,6 +10,6 @@ public class CourseDayDto {
     private Long dayId;
     private Long courseId;
     private Long classroomId;
-    private Date beginTime;
-    private Date endTime;
+    private LocalTime beginTime;
+    private LocalTime endTime;
 }

@@ -22,11 +22,11 @@ public class ClassRoomAspect {
         List<CourseDay> courseDays = courseDayRepo.findAll();
 
         courseDays.forEach(x-> {
-            if (courseDayDto.getBeginTime().compareTo(x.getBeginTime()) > 0 &&
-                    courseDayDto.getBeginTime().compareTo(x.getEndTime()) < 0 &&
+            if (courseDayDto.getBeginTime().compareTo(x.getBeginTime()) >= 0 &&
+                    courseDayDto.getBeginTime().compareTo(x.getEndTime()) <= 0 &&
                     courseDayDto.getDayId().equals(x.getDay().getId()) &&
-            courseDayDto.getEndTime().compareTo(x.getBeginTime()) > 0 &&
-            courseDayDto.getEndTime().compareTo(x.getEndTime()) < 0) {
+            courseDayDto.getEndTime().compareTo(x.getBeginTime()) >= 0 &&
+            courseDayDto.getEndTime().compareTo(x.getEndTime()) <= 0) {
                 throw new RuntimeException("В указанное время в данной аудитории в этот день уже назначено другое занятие!");
             }
         });

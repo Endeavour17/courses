@@ -3,7 +3,7 @@ package kg.megacom.courses.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalTime;
 
 @Data
 @Entity
@@ -22,6 +22,6 @@ public class CourseDay {
     @ManyToOne
     @JoinColumn(name = "classroom_classroom_id")
     private Classroom classroom;
-    private Date beginTime;
-    private Date endTime;
+    private LocalTime beginTime;
+    private LocalTime endTime;
 }
