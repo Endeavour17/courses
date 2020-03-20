@@ -8,6 +8,7 @@ import kg.megacom.courses.services.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,10 +33,19 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private CourseDayRepo courseDayRepo;
 
+    @Autowired
+    private PaymentRepo paymentRepo;
+
     @Override
     public CourseDto saveCourse(CourseDto courseDto) {
-        Teacher teacher = ClassMapper.INSTANCE.teacherDtoToTeacher(courseDto.getTeacher());
+        Teacher teacher = ClassMapper.INSTANCE.teacherDtoToTeacher(courseDto.getTeacherDto());
         Course course = ClassMapper.INSTANCE.courseDtoToCourse(courseDto);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(course.getStartDate());
+        calendar.add(Calendar.MONTH, course.getMonthAmount());
+        course.setEndDate(calendar.getTime());
+
         course.setTeacher(teacher);
         course = courseRepo.save(course);
         return ClassMapper.INSTANCE.courseToCourseDto(course);
@@ -157,5 +167,36 @@ public class AdminServiceImpl implements AdminService {
         courseDay = courseDayRepo.save(courseDay);
 
         return ClassMapper.INSTANCE.courseDayToCourseDayDto(courseDay);
+    }
+
+    @Override
+    public PaymentDto addPayment(PaymentDto paymentDto) {
+        Payment payment = ClassMapper.INSTANCE.paymentDtoToPayment(paymentDto);
+        Student student = ClassMapper.INSTANCE.studentDtoToStudent(paymentDto.getStudent());
+        Course course = ClassMapper.INSTANCE.courseDtoToCourse(paymentDto.getCourse());
+        payment.setStudent(student);
+        payment.setCourse(course);
+        payment = paymentRepo.save(payment);
+        return ClassMapper.INSTANCE.paymentToPaymentDto(payment);
+    }
+
+    @Override
+    public List<PaymentDto> getAllPayments() {
+        List<Payment> payments = paymentRepo.findAll();
+        return ClassMapper.INSTANCE.paymentsToPaymentDtos(payments);
+    }
+
+    @Override
+    public List<PaymentDto> getAllPaymentsByStudent(StudentDto studentDto) {
+        Student student = ClassMapper.INSTANCE.studentDtoToStudent(studentDto);
+        List<Payment> payments = paymentRepo.findAllPaymentByStudent(student);
+        return ClassMapper.INSTANCE.paymentsToPaymentDtos(payments);
+    }
+
+    @Override
+    public List<PaymentDto> getAllPaymentsByCourse(CourseDto courseDto) {
+        Course course = ClassMapper.INSTANCE.courseDtoToCourse(courseDto);
+        List<Payment> payments = paymentRepo.findAllPaymentByCourse(course);
+        return ClassMapper.INSTANCE.paymentsToPaymentDtos(payments);
     }
 }

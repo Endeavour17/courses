@@ -10,5 +10,8 @@ public class CourseDto {
     private String name;
     private Date startDate;
     private Date endDate;
-    private TeacherDto teacher;
+    private int lessonsPerWeek;
+    private int monthAmount;
+    private double pricePerMonth;
+    private TeacherDto teacherDto;
 }

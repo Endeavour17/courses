@@ -35,4 +35,8 @@ public interface ClassMapper {
 
     CourseDayDto courseDayToCourseDayDto(CourseDay courseDay);
 
+    Payment paymentDtoToPayment(PaymentDto paymentDto);
+    PaymentDto paymentToPaymentDto(Payment payment);
+    List<PaymentDto> paymentsToPaymentDtos(List<Payment> payments);
+
 }

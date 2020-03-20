@@ -1,6 +1,7 @@
 package kg.megacom.courses.services;
 
 import kg.megacom.courses.dto.*;
+import kg.megacom.courses.entities.Student;
 
 import java.util.List;
 
@@ -24,4 +25,9 @@ public interface AdminService {
     List<DayDto> getDays();
 
     CourseDayDto setCourseClassroomAndDay(CourseDayDto courseDayDto);
+
+    PaymentDto addPayment(PaymentDto paymentDto);
+    List<PaymentDto> getAllPayments();
+    List<PaymentDto> getAllPaymentsByStudent(StudentDto studentDto);
+    List<PaymentDto> getAllPaymentsByCourse(CourseDto courseDto);
 }
